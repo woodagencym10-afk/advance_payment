@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Аванси — МП</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.12);
+    --border-md: rgba(0,0,0,0.2);
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --hint: #9a9a9a;
+    --accent: #1a1a1a;
+    --accent-fg: #ffffff;
+    --info-bg: #e8f0fe;
+    --info-text: #1a56c4;
+    --success: #1a7a3c;
+    --danger: #c0392b;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a;
+      --surface: #242424;
+      --border: rgba(255,255,255,0.1);
+      --border-md: rgba(255,255,255,0.2);
+      --text: #f0f0f0;
+      --muted: #a0a0a0;
+      --hint: #666;
+      --accent: #f0f0f0;
+      --accent-fg: #1a1a1a;
+      --info-bg: #1a2a4a;
+      --info-text: #7aadff;
+      --success: #4caf82;
+      --danger: #e57373;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 640px; margin: 0 auto; }
+  .page-header { margin-bottom: 1.5rem; }
+  .page-header h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .page-header p { font-size: 14px; color: var(--muted); }
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 12px;
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--hint);
+    margin-bottom: 14px;
+  }
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--border-md);
+  }
+  .field textarea { resize: vertical; min-height: 70px; font-size: 13px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } }
+  .amount-wrap { position: relative; }
+  .amount-wrap .currency {
+    position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px; color: var(--muted);
+    pointer-events: none;
+  }
+  .amount-wrap input { padding-left: 2rem; }
+  .sources { display: flex; flex-wrap: wrap; gap: 7px; }
+  .src-btn {
+    font-size: 13px;
+    padding: 6px 14px;
+    border: 0.5px solid var(--border-md);
+    border-radius: 20px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text);
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .src-btn.active {
+    background: var(--info-bg);
+    border-color: var(--info-text);
+    color: var(--info-text);
+  }
+  .src-btn:hover:not(.active) { background: var(--bg); }
+  .ratio-wrap { margin-top: 10px; }
+  .ratio-bar { height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; }
+  .ratio-fill { height: 100%; border-radius: 3px; background: var(--info-text); transition: width 0.3s; }
+  .ratio-label { font-size: 12px; color: var(--muted); margin-top: 5px; }
+  .file-zone {
+    border: 1px dashed var(--border-md);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .file-zone:hover { background: var(--bg); }
+  .file-zone .icon { font-size: 26px; margin-bottom: 6px; }
+  .file-zone .ft { font-size: 14px; color: var(--muted); }
+  .file-zone .fname { font-size: 12px; color: var(--success); margin-top: 6px; }
+  .notice {
+    font-size: 12px; color: var(--muted);
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: var(--bg);
+    border-radius: var(--radius);
+    border-left: 2px solid var(--border-md);
+  }
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: var(--radius);
+    border: none;
+    background: var(--accent);
+    color: var(--accent-fg);
+    transition: opacity 0.15s;
+    font-family: inherit;
+    margin-top: 1.5rem;
+  }
+  .btn-submit:hover { opacity: 0.85; }
+  .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+  .status {
+    text-align: center;
+    font-size: 13px;
+    margin-top: 10px;
+    min-height: 18px;
+  }
+  .status.ok { color: var(--success); }
+  .status.err { color: var(--danger); }
+  .footer-note {
+    margin-top: 16px;
+    padding: 12px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border);
+  }
+  .footer-note p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .footer-note strong { color: var(--text); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="page-header">
+    <h1>Внесення авансу</h1>
+    <p>Дані збережуться в таблицю і підуть у TG-групу зі скріном рахунку</p>
+  </div>
+
+  <!-- Основна інформація -->
+  <div class="card">
+    <div class="card-label">Основна інформація</div>
+    <div class="row2">
+      <div class="field">
+        <label>Ім'я МП</label>
+        <input type="text" id="mp-name" placeholder="Ім'я та прізвище" />
+      </div>
+      <div class="field">
+        <label>Дата авансу</label>
+        <input type="date" id="adv-date" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Посилання на угоду (CRM)</label>
+      <input type="url" id="deal-link" placeholder="https://..." />
+    </div>
+  </div>
+
+  <!-- Фінанси -->
+  <div class="card">
+    <div class="card-label">Фінанси</div>
+    <div class="row2">
+      <div class="field">
+        <label>Сума авансу</label>
+        <div class="amount-wrap">
+          <span class="currency">₴</span>
+          <input type="number" id="adv-amount" placeholder="0" min="0" oninput="updateRatio()" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Сума угоди</label>
+        <div class="amount-wrap">
+          <span class="currency">₴</span>
+          <input type="number" id="deal-amount" placeholder="0" min="0" oninput="updateRatio()" />
+        </div>
+      </div>
+    </div>
+    <div class="ratio-wrap" id="ratio-wrap" style="display:none">
+      <div class="ratio-bar"><div class="ratio-fill" id="ratio-fill" style="width:0%"></div></div>
+      <div class="ratio-label" id="ratio-label"></div>
+    </div>
+  </div>
+
+  <!-- Джерело -->
+  <div class="card">
+    <div class="card-label">Джерело</div>
+    <div class="sources" id="sources">
+      <button class="src-btn" onclick="selectSource(this)">Facebook Ecoforma</button>
+      <button class="src-btn" onclick="selectSource(this)">Дзвінок Сайт Ecoforma</button>
+      <button class="src-btn" onclick="selectSource(this)">Сайт Ecoforma</button>
+      <button class="src-btn" onclick="selectSource(this)">Facebook Wood Agency</button>
+      <button class="src-btn" onclick="selectSource(this)">Сайт Wood Agency</button>
+      <button class="src-btn" onclick="selectSource(this)">Дзвінок</button>
+      <button class="src-btn" onclick="selectSource(this)">OLX</button>
+      <button class="src-btn" onclick="selectSource(this, true)" data-other="true">Інше...</button>
+    </div>
+    <input type="hidden" id="source-val" />
+    <input type="text" id="source-other" placeholder="Вкажи джерело" style="display:none; margin-top:10px; width:100%; padding:10px 12px; font-size:15px; border:0.5px solid var(--border); border-radius:10px; background:var(--bg); color:var(--text); outline:none; font-family:inherit;" oninput="document.getElementById('source-val').value=this.value.trim()" />
+  </div>
+
+  <!-- UTM -->
+  <div class="card">
+    <div class="card-label">UTM-мітка</div>
+    <div class="field" style="margin:0">
+      <textarea id="utm" placeholder="Вставте UTM-мітку угоди"></textarea>
+      <div style="font-size:12px; color:var(--hint); margin-top:7px; line-height:1.5;">Якщо конкретно в даній картці угоди не відображає UTM — залиште порожнім</div>
+    </div>
+  </div>
+
+  <!-- Скрін рахунку -->
+  <div class="card">
+    <div class="card-label">Скрін рахунку</div>
+    <div class="file-zone" id="file-zone" onclick="document.getElementById('invoice-file').click()">
+      <div class="icon">📎</div>
+      <div class="ft">Натисни або встав скрін (Ctrl+V)</div>
+      <div class="fname" id="file-name" style="display:none"></div>
+    </div>
+    <input type="file" id="invoice-file" accept="image/*,.pdf" style="display:none" onchange="handleFile(this)" />
+  </div>
+
+  <button class="btn-submit" id="submit-btn" onclick="submitForm()">Зафіксувати аванс</button>
+  <div class="status" id="status-msg"></div>
+</div>
+
+<script>
+  // ====== НАЛАШТУВАННЯ ======
+  const TG_BOT_TOKEN = '8560092248:AAHJgBqK83X1GrVKybSuYba096_dSlfz4gs';
+  const TG_CHAT_ID = '-5052283173';
+  const SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbzl6g_Tsna_8e2v6ZOJIjvMymmYqhHUmPS15KEc2DfsHwl6USCjrAIO5x72Bba38lgi_Q/exec';
+  // ==========================
+
+  document.getElementById('adv-date').value = new Date().toISOString().split('T')[0];
+
+  function selectSource(btn, isOther) {
+    document.querySelectorAll('.src-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const otherInput = document.getElementById('source-other');
+    if (isOther) {
+      otherInput.style.display = 'block';
+      otherInput.focus();
+      document.getElementById('source-val').value = otherInput.value.trim();
+    } else {
+      otherInput.style.display = 'none';
+      document.getElementById('source-val').value = btn.textContent.trim();
+    }
+  }
+
+  document.addEventListener('paste', function(e) {
+    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+    for (const item of items) {
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        document.getElementById('invoice-file').files = dt.files;
+        const el = document.getElementById('file-name');
+        el.textContent = '✓ Скрін вставлено';
+        el.style.display = 'block';
+        document.getElementById('file-zone').style.borderColor = 'var(--success)';
+        break;
+      }
+    }
+  });
+
+  function handleFile(input) {
+    const f = input.files[0];
+    const el = document.getElementById('file-name');
+    if (f) { el.textContent = '✓ ' + f.name; el.style.display = 'block'; }
+  }
+
+  function updateRatio() {
+    const adv = parseFloat(document.getElementById('adv-amount').value) || 0;
+    const deal = parseFloat(document.getElementById('deal-amount').value) || 0;
+    const wrap = document.getElementById('ratio-wrap');
+    if (adv > 0 && deal > 0) {
+      wrap.style.display = 'block';
+      const pct = Math.min(100, Math.round(adv / deal * 100));
+      document.getElementById('ratio-fill').style.width = pct + '%';
+      document.getElementById('ratio-label').textContent = 'Аванс — ' + pct + '% від суми угоди';
+    } else {
+      wrap.style.display = 'none';
+    }
+  }
+
+  function validate() {
+    if (!document.getElementById('mp-name').value.trim()) return "Введи своє ім'я";
+    if (!document.getElementById('adv-date').value) return 'Вкажи дату';
+    if (!document.getElementById('deal-link').value.trim()) return 'Вкажи посилання на угоду';
+    const adv = parseFloat(document.getElementById('adv-amount').value);
+    const deal = parseFloat(document.getElementById('deal-amount').value);
+    if (!adv || adv <= 0) return 'Вкажи суму авансу';
+    if (!deal || deal <= 0) return 'Вкажи суму угоди';
+    if (!document.getElementById('source-val').value) return 'Обери джерело';
+    return null;
+  }
+
+  async function submitForm() {
+    const err = validate();
+    const statusEl = document.getElementById('status-msg');
+    if (err) { statusEl.textContent = err; statusEl.className = 'status err'; return; }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Відправляємо...';
+    statusEl.textContent = '';
+
+    const mpName   = document.getElementById('mp-name').value.trim();
+    const date     = document.getElementById('adv-date').value;
+    const dealLink = document.getElementById('deal-link').value.trim();
+    const advAmt   = parseFloat(document.getElementById('adv-amount').value);
+    const dealAmt  = parseFloat(document.getElementById('deal-amount').value);
+    const source   = document.getElementById('source-val').value;
+    const utm      = document.getElementById('utm').value.trim();
+    const pct      = Math.round(advAmt / dealAmt * 100);
+
+    try {
+      // 1 — Google Sheets
+      if (SHEET_WEBHOOK !== 'ВСТАВИТИ_URL_APPS_SCRIPT') {
+        await fetch(SHEET_WEBHOOK, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mpName, date, dealLink, advAmount: advAmt, dealAmount: dealAmt, source, utm })
+        });
+      }
+
+      // 2 — Telegram
+      const tgText =
+        `💰 *Новий аванс*\n\n` +
+        `👤 МП: ${mpName}\n` +
+        `📅 Дата: ${date}\n` +
+        `🔗 [Угода в CRM](${dealLink})\n` +
+        `💵 Аванс: ₴${advAmt.toLocaleString('uk-UA')}\n` +
+        `📋 Сума угоди: ₴${dealAmt.toLocaleString('uk-UA')}\n` +
+        `📊 Відсоток авансу: ${pct}%\n` +
+        `📣 Джерело: ${source}\n` +
+        `🔖 UTM: ${utm || '—'}`;
+
+      const invoiceFile = document.getElementById('invoice-file').files[0];
+
+      if (invoiceFile) {
+        const fd = new FormData();
+        fd.append('chat_id', TG_CHAT_ID);
+        fd.append('photo', invoiceFile);
+        fd.append('caption', tgText);
+        fd.append('parse_mode', 'Markdown');
+        await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fd });
+      } else {
+        await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TG_CHAT_ID, text: tgText, parse_mode: 'Markdown' })
+        });
+      }
+
+      statusEl.textContent = '✓ Аванс відправлено успішно!';
+      statusEl.className = 'status ok';
+      btn.textContent = 'Відправлено ✓';
+
+      // очищення форми
+      setTimeout(() => {
+        document.getElementById('mp-name').value = '';
+        document.getElementById('deal-link').value = '';
+        document.getElementById('adv-amount').value = '';
+        document.getElementById('deal-amount').value = '';
+        document.getElementById('utm').value = '';
+        document.getElementById('source-val').value = '';
+        document.getElementById('invoice-file').value = '';
+        document.getElementById('file-name').style.display = 'none';
+        document.querySelectorAll('.src-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('ratio-wrap').style.display = 'none';
+        document.getElementById('adv-date').value = new Date().toISOString().split('T')[0];
+        btn.disabled = false;
+        btn.textContent = 'Зафіксувати аванс';
+        document.getElementById('source-other').style.display = 'none';
+        document.getElementById('file-zone').style.borderColor = '';
+        statusEl.textContent = '';
+      }, 3000);
+
+    } catch(e) {
+      statusEl.textContent = 'Помилка відправки. Перевір інтернет-з\'єднання.';
+      statusEl.className = 'status err';
+      btn.disabled = false;
+      btn.textContent = 'Зафіксувати аванс';
+    }
+  }
+</script>
+</body>
+</html>
