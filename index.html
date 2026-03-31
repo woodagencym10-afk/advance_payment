@@ -255,6 +255,14 @@
     </div>
   </div>
 
+  <!-- Куди відбулась оплата -->
+  <div class="card">
+    <div class="card-label">Куди відбулась оплата</div>
+    <div class="field" style="margin:0">
+      <input type="text" id="payment-dest" placeholder="ПІБ власника картки або ФОП, на який клієнт здійснював оплату" />
+    </div>
+  </div>
+
   <!-- Скрін рахунку -->
   <div class="card">
     <div class="card-label">Скрін рахунку</div>
@@ -373,21 +381,20 @@
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mpName, date, dealLink, advAmount: advAmt, dealAmount: dealAmt, source, utm })
+          body: JSON.stringify({ mpName, date, dealLink, advAmount: advAmt, dealAmount: dealAmt, source, utm, paymentDest: document.getElementById('payment-dest').value.trim() })
         });
       }
 
       // 2 — Telegram
+      const payDest = document.getElementById('payment-dest').value.trim();
       const tgText =
-        `💰 *Новий аванс*\n\n` +
-        `👤 МП: ${mpName}\n` +
-        `📅 Дата: ${date}\n` +
-        `🔗 [Угода в CRM](${dealLink})\n` +
-        `💵 Аванс: ₴${advAmt.toLocaleString('uk-UA')}\n` +
-        `📋 Сума угоди: ₴${dealAmt.toLocaleString('uk-UA')}\n` +
-        `📊 Відсоток авансу: ${pct}%\n` +
-        `📣 Джерело: ${source}\n` +
-        `🔖 UTM: ${utm || '—'}`;
+        `❗️*Надходження коштів*\n\n` +
+        `МП: ${mpName}\n` +
+        `Угода: [посилання](${dealLink})\n` +
+        `Сума авансу: ₴${advAmt.toLocaleString('uk-UA')}\n` +
+        `Куди відбулась оплата: ${payDest || '—'}\n` +
+        `Джерело: ${source}\n` +
+        (utm ? `UTM: ${utm}` : '');
 
       const invoiceFile = document.getElementById('invoice-file').files[0];
 
@@ -425,6 +432,7 @@
         document.getElementById('adv-date').value = new Date().toISOString().split('T')[0];
         btn.disabled = false;
         btn.textContent = 'Зафіксувати аванс';
+        document.getElementById('payment-dest').value = '';
         document.getElementById('source-other').style.display = 'none';
         document.getElementById('file-zone').style.borderColor = '';
         statusEl.textContent = '';
