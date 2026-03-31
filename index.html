@@ -272,10 +272,15 @@
 
 <script>
   // ====== НАЛАШТУВАННЯ ======
-  const TG_BOT_TOKEN = '8560092248:AAHJgBqK83X1GrVKybSuYba096_dSlfz4gs';
-  const TG_CHAT_ID = '-5052283173';
+  const _p = new URLSearchParams(window.location.search);
+  const TG_BOT_TOKEN = _p.get('t') || '';
+  const TG_CHAT_ID = _p.get('c') || '';
   const SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbzl6g_Tsna_8e2v6ZOJIjvMymmYqhHUmPS15KEc2DfsHwl6USCjrAIO5x72Bba38lgi_Q/exec';
   // ==========================
+
+  if (!TG_BOT_TOKEN || !TG_CHAT_ID) {
+    document.body.innerHTML = '<div style="padding:2rem;font-family:sans-serif;color:#c0392b;">⚠️ Посилання недійсне. Використовуй закріплене посилання з TG-групи.</div>';
+  }
 
   document.getElementById('adv-date').value = new Date().toISOString().split('T')[0];
 
