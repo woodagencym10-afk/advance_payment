@@ -147,13 +147,12 @@
     <div class="card">
       <div class="card-label">Озвучена плюшка</div>
       <div class="chips" id="bonus-chips">
-        <button class="chip" onclick="selectChip(this,'bonus-chips','bonus-val','bonus-other','',true)">Безкоштовна доставка</button>
-        <button class="chip" onclick="selectChip(this,'bonus-chips','bonus-val','bonus-other','',true)">Знижка на доставку</button>
-        <button class="chip" onclick="selectChip(this,'bonus-chips','bonus-val','bonus-other','',true)">Кріпильні матеріали</button>
-        <button class="chip" onclick="selectChip(this,'bonus-chips','bonus-val','bonus-other',true,true)">Інше...</button>
+        <button class="chip" onclick="toggleBonus(this)">Безкоштовна доставка</button>
+        <button class="chip" onclick="toggleBonus(this)">Знижка на доставку</button>
+        <button class="chip" onclick="toggleBonus(this)">Кріпильні матеріали</button>
+        <button class="chip" onclick="toggleBonus(this, true)">Інше...</button>
       </div>
-      <input type="hidden" id="bonus-val" />
-      <input type="text" id="bonus-other" class="extra-input" placeholder="Вкажи плюшку" oninput="document.getElementById('bonus-val').value=this.value.trim()" />
+      <input type="text" id="bonus-other" class="extra-input" placeholder="Вкажи плюшку" oninput="updateBonusVal()" />
     </div>
 
     <div class="card">
@@ -358,6 +357,38 @@
 
   function showErr(el, msg) { el.textContent = msg; el.className = 'status err'; }
 
+  // Множинний вибір плюшок
+  function toggleBonus(btn, isOther) {
+    btn.classList.toggle('active-green');
+    const otherEl = document.getElementById('bonus-other');
+    if (isOther) {
+      const isNowActive = btn.classList.contains('active-green');
+      otherEl.style.display = isNowActive ? 'block' : 'none';
+      if (isNowActive) otherEl.focus();
+    }
+    updateBonusVal();
+  }
+
+  function updateBonusVal() {
+    const selected = [];
+    document.querySelectorAll('#bonus-chips .chip.active-green').forEach(b => {
+      if (!b.textContent.includes('Інше')) selected.push(b.textContent.trim());
+    });
+    const otherVal = document.getElementById('bonus-other').value.trim();
+    if (otherVal) selected.push(otherVal);
+    // bonus-val not used directly — read at submit time
+  }
+
+  function getBonusValue() {
+    const selected = [];
+    document.querySelectorAll('#bonus-chips .chip.active-green').forEach(b => {
+      if (!b.textContent.includes('Інше')) selected.push(b.textContent.trim());
+    });
+    const otherVal = document.getElementById('bonus-other').value.trim();
+    if (otherVal) selected.push(otherVal);
+    return selected.join(', ');
+  }
+
   async function submitAdvance() {
     const statusEl = document.getElementById('status-msg');
     const btn      = document.getElementById('submit-btn');
@@ -369,7 +400,7 @@
     const source   = document.getElementById('source-val').value;
     const utm      = document.getElementById('utm').value.trim();
     const payDest  = document.getElementById('payment-dest').value.trim();
-    const bonus    = document.getElementById('bonus-val').value;
+    const bonus    = getBonusValue();
     const delivery = document.getElementById('delivery-val').value;
 
     if (!mpName)               return showErr(statusEl, "Введи своє ім'я");
@@ -478,7 +509,7 @@
   }
 
   function resetAdvance(btn) {
-    ['mp-name','deal-link','utm','payment-dest','source-other','bonus-other','delivery-other'].forEach(id => document.getElementById(id).value = '');
+    ['mp-name','deal-link','utm','payment-dest','source-other','bonus-other','delivery-other'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     ['adv-amount','deal-amount'].forEach(id => document.getElementById(id).value = '');
     ['source-val','bonus-val','delivery-val'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('invoice-file').value = '';
@@ -488,6 +519,7 @@
     document.getElementById('adv-date').value = new Date().toISOString().split('T')[0];
     document.getElementById('file-zone').style.borderColor = '';
     document.querySelectorAll('#sources .chip, #bonus-chips .chip, #delivery-chips .chip').forEach(b => b.classList.remove('active-src','active-green'));
+    document.getElementById('bonus-other').style.display = 'none';
     document.getElementById('status-msg').textContent = '';
     btn.disabled = false; btn.textContent = 'Зафіксувати аванс';
   }
