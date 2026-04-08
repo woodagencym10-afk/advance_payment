@@ -171,7 +171,7 @@
     <div class="card">
       <div class="card-label">Локація доставки</div>
       <div class="field" style="margin:0">
-        <input type="text" id="location" placeholder="Місто та область" />
+        <input type="text" id="location" placeholder="Місто, відділення або адреса доставки" />
       </div>
     </div>
 
@@ -423,7 +423,11 @@
     try {
       let isUpdate = false, existingAdv = 0;
       try {
-        const checkResp = await fetch(SHEET_WEBHOOK + '?action=check&link=' + encodeURIComponent(dealLink));
+        const checkResp = await fetch(SHEET_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'check', dealLink: dealLink })
+        });
         const checkData = await checkResp.json();
         isUpdate = checkData.found === true;
         existingAdv = parseFloat(checkData.advAmount) || 0;
