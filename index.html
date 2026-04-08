@@ -7,99 +7,69 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --border: rgba(0,0,0,0.12);
-    --border-md: rgba(0,0,0,0.2);
-    --text: #1a1a1a;
-    --muted: #6b6b6b;
-    --hint: #9a9a9a;
-    --accent: #1a1a1a;
-    --accent-fg: #ffffff;
-    --info-bg: #e8f0fe;
-    --info-text: #1a56c4;
-    --success: #1a7a3c;
-    --danger: #c0392b;
-    --warning-bg: #fff8e1;
-    --warning-text: #b45309;
-    --radius: 10px;
-    --radius-lg: 14px;
+    --bg: #f5f4f0; --surface: #ffffff;
+    --border: rgba(0,0,0,0.12); --border-md: rgba(0,0,0,0.2);
+    --text: #1a1a1a; --muted: #6b6b6b; --hint: #9a9a9a;
+    --accent: #1a1a1a; --accent-fg: #ffffff;
+    --info-bg: #e8f0fe; --info-text: #1a56c4;
+    --success: #1a7a3c; --danger: #c0392b;
+    --radius: 10px; --radius-lg: 14px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1a1a1a;
-      --surface: #242424;
-      --border: rgba(255,255,255,0.1);
-      --border-md: rgba(255,255,255,0.2);
-      --text: #f0f0f0;
-      --muted: #a0a0a0;
-      --hint: #666;
-      --accent: #f0f0f0;
-      --accent-fg: #1a1a1a;
-      --info-bg: #1a2a4a;
-      --info-text: #7aadff;
-      --success: #4caf82;
-      --danger: #e57373;
-      --warning-bg: #2a1f00;
-      --warning-text: #fbbf24;
+      --bg: #1a1a1a; --surface: #242424;
+      --border: rgba(255,255,255,0.1); --border-md: rgba(255,255,255,0.2);
+      --text: #f0f0f0; --muted: #a0a0a0; --hint: #666;
+      --accent: #f0f0f0; --accent-fg: #1a1a1a;
+      --info-bg: #1a2a4a; --info-text: #7aadff;
+      --success: #4caf82; --danger: #e57373;
     }
   }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
   .container { max-width: 640px; margin: 0 auto; }
-
-  /* ── Tabs ── */
   .tabs { display: flex; gap: 4px; background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 4px; margin-bottom: 20px; }
   .tab-btn { flex: 1; padding: 10px; font-size: 14px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; background: transparent; color: var(--muted); transition: all 0.15s; font-family: inherit; }
   .tab-btn.active { background: var(--accent); color: var(--accent-fg); }
   .tab-btn.active.refund-tab { background: var(--danger); color: #fff; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
-
-  /* ── Cards ── */
   .page-header { margin-bottom: 1.2rem; }
   .page-header h1 { font-size: 20px; font-weight: 600; margin-bottom: 3px; }
   .page-header p { font-size: 13px; color: var(--muted); }
   .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 10px; }
-  .card.danger-card { border-color: rgba(192,57,43,0.3); background: rgba(192,57,43,0.03); }
+  .card.danger-card { border-color: rgba(192,57,43,0.3); }
   .card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--hint); margin-bottom: 12px; }
-
-  /* ── Fields ── */
   .field { margin-bottom: 12px; }
   .field:last-child { margin-bottom: 0; }
   .field label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
-  .field input, .field select, .field textarea { width: 100%; padding: 10px 12px; font-size: 15px; border: 0.5px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s; font-family: inherit; }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--border-md); }
+  .field input, .field textarea { width: 100%; padding: 10px 12px; font-size: 15px; border: 0.5px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s; font-family: inherit; }
+  .field input:focus, .field textarea:focus { border-color: var(--border-md); }
   .field textarea { resize: vertical; min-height: 64px; font-size: 13px; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } }
   .amount-wrap { position: relative; }
   .amount-wrap .currency { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--muted); pointer-events: none; }
   .amount-wrap input { padding-left: 2rem; }
-
-  /* ── Sources ── */
-  .sources { display: flex; flex-wrap: wrap; gap: 6px; }
-  .src-btn { font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--border-md); border-radius: 20px; cursor: pointer; background: transparent; color: var(--text); transition: all 0.15s; font-family: inherit; }
-  .src-btn.active { background: var(--info-bg); border-color: var(--info-text); color: var(--info-text); }
-  .src-btn:hover:not(.active) { background: var(--bg); }
-
-  /* ── Ratio ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--border-md); border-radius: 20px; cursor: pointer; background: transparent; color: var(--text); transition: all 0.15s; font-family: inherit; }
+  .chip.active-src { background: var(--info-bg); border-color: var(--info-text); color: var(--info-text); }
+  .chip.active-green { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; }
+  @media (prefers-color-scheme: dark) {
+    .chip.active-green { background: #1b3a1c; border-color: #4caf82; color: #4caf82; }
+  }
+  .chip:hover:not(.active-src):not(.active-green) { background: var(--bg); }
+  .extra-input { margin-top: 8px; width: 100%; padding: 9px 12px; font-size: 14px; border: 0.5px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; font-family: inherit; display: none; }
+  .extra-input:focus { border-color: var(--border-md); }
   .ratio-wrap { margin-top: 8px; }
   .ratio-bar { height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; }
   .ratio-fill { height: 100%; border-radius: 3px; background: var(--info-text); transition: width 0.3s; }
   .ratio-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-  /* ── File zone ── */
   .file-zone { border: 1px dashed var(--border-md); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: background 0.15s; }
   .file-zone:hover { background: var(--bg); }
   .file-zone .icon { font-size: 24px; margin-bottom: 5px; }
   .file-zone .ft { font-size: 13px; color: var(--muted); }
   .file-zone .fname { font-size: 12px; color: var(--success); margin-top: 5px; }
-
-  /* ── Hint ── */
   .hint { font-size: 12px; color: var(--hint); margin-top: 6px; line-height: 1.5; }
-  .warning-box { font-size: 12px; color: var(--warning-text); background: var(--warning-bg); border-radius: var(--radius); padding: 8px 10px; margin-top: 8px; display: none; }
-
-  /* ── Buttons ── */
   .btn-submit { width: 100%; padding: 13px; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: var(--radius); border: none; background: var(--accent); color: var(--accent-fg); transition: opacity 0.15s; font-family: inherit; margin-top: 1.2rem; }
   .btn-submit:hover { opacity: 0.85; }
   .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -107,25 +77,17 @@
   .status { text-align: center; font-size: 13px; margin-top: 8px; min-height: 18px; }
   .status.ok { color: var(--success); }
   .status.err { color: var(--danger); }
-
-  /* ── Mode badge ── */
-  .mode-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; background: var(--info-bg); color: var(--info-text); }
-  .mode-badge.update { background: #fff8e1; color: #b45309; }
-  .mode-badge.update-dark { background: #2a1f00; color: #fbbf24; }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- TABS -->
   <div class="tabs">
-    <button class="tab-btn active" id="tab-advance" onclick="switchTab('advance')">💰 Аванс / Доплата</button>
-    <button class="tab-btn refund-tab" id="tab-refund" onclick="switchTab('refund')">↩️ Повернення</button>
+    <button class="tab-btn active" id="tab-advance" onclick="switchTab('advance')">&#128176; Аванс / Доплата</button>
+    <button class="tab-btn refund-tab" id="tab-refund" onclick="switchTab('refund')">&#8617;&#65039; Повернення</button>
   </div>
 
-  <!-- ══════════════════════════════════════════════ -->
-  <!-- TAB 1: АВАНС / ДОПЛАТА                        -->
-  <!-- ══════════════════════════════════════════════ -->
+  <!-- TAB 1 -->
   <div class="tab-panel active" id="panel-advance">
     <div class="page-header">
       <h1>Фіксація надходження коштів</h1>
@@ -135,39 +97,17 @@
     <div class="card">
       <div class="card-label">Основна інформація</div>
       <div class="row2">
-        <div class="field">
-          <label>Ім'я МП</label>
-          <input type="text" id="mp-name" placeholder="Ім'я та прізвище" />
-        </div>
-        <div class="field">
-          <label>Дата</label>
-          <input type="date" id="adv-date" />
-        </div>
+        <div class="field"><label>Ім'я МП</label><input type="text" id="mp-name" placeholder="Ім'я та прізвище" /></div>
+        <div class="field"><label>Дата</label><input type="date" id="adv-date" /></div>
       </div>
-      <div class="field">
-        <label>Посилання на угоду (CRM)</label>
-        <input type="url" id="deal-link" placeholder="https://..." oninput="clearModeHint()" />
-        <div class="warning-box" id="mode-hint"></div>
-      </div>
+      <div class="field"><label>Посилання на угоду (CRM)</label><input type="url" id="deal-link" placeholder="https://..." /></div>
     </div>
 
     <div class="card">
       <div class="card-label">Фінанси</div>
       <div class="row2">
-        <div class="field">
-          <label>Сума авансу</label>
-          <div class="amount-wrap">
-            <span class="currency">₴</span>
-            <input type="number" id="adv-amount" placeholder="0" min="0" oninput="updateRatio()" />
-          </div>
-        </div>
-        <div class="field">
-          <label>Сума угоди</label>
-          <div class="amount-wrap">
-            <span class="currency">₴</span>
-            <input type="number" id="deal-amount" placeholder="0" min="0" oninput="updateRatio()" />
-          </div>
-        </div>
+        <div class="field"><label>Сума авансу</label><div class="amount-wrap"><span class="currency">&#8372;</span><input type="number" id="adv-amount" placeholder="0" min="0" oninput="updateRatio()" /></div></div>
+        <div class="field"><label>Сума угоди</label><div class="amount-wrap"><span class="currency">&#8372;</span><input type="number" id="deal-amount" placeholder="0" min="0" oninput="updateRatio()" /></div></div>
       </div>
       <div class="ratio-wrap" id="ratio-wrap" style="display:none">
         <div class="ratio-bar"><div class="ratio-fill" id="ratio-fill" style="width:0%"></div></div>
@@ -177,18 +117,18 @@
 
     <div class="card">
       <div class="card-label">Джерело</div>
-      <div class="sources" id="sources">
-        <button class="src-btn" onclick="selectSource(this)">Facebook Ecoforma</button>
-        <button class="src-btn" onclick="selectSource(this)">Дзвінок Сайт Ecoforma</button>
-        <button class="src-btn" onclick="selectSource(this)">Сайт Ecoforma</button>
-        <button class="src-btn" onclick="selectSource(this)">Facebook Wood Agency</button>
-        <button class="src-btn" onclick="selectSource(this)">Сайт Wood Agency</button>
-        <button class="src-btn" onclick="selectSource(this)">Дзвінок</button>
-        <button class="src-btn" onclick="selectSource(this)">OLX</button>
-        <button class="src-btn" onclick="selectSource(this, true)">Інше...</button>
+      <div class="chips" id="sources">
+        <button class="chip" onclick="selectChip(this,'sources','source-val','source-other')">Facebook Ecoforma</button>
+        <button class="chip" onclick="selectChip(this,'sources','source-val','source-other')">Дзвінок Сайт Ecoforma</button>
+        <button class="chip" onclick="selectChip(this,'sources','source-val','source-other')">Сайт Ecoforma</button>
+        <button class="chip" onclick="selectChip(this,'sources','source-val','source-other')">Facebook Wood Agency</button>
+        <button class="chip" onclick="selectChip(this,'sources','source-val','source-other')">Сайт Wood Agency</button>
+        <button class="chip" onclick="selectChip(this,'sources','source-val','source-other')">Дзвінок</button>
+        <button class="chip" onclick="selectChip(this,'sources','source-val','source-other')">OLX</button>
+        <button class="chip" onclick="selectChip(this,'sources','source-val','source-other',true)">Інше...</button>
       </div>
       <input type="hidden" id="source-val" />
-      <input type="text" id="source-other" placeholder="Вкажи джерело" style="display:none; margin-top:8px; width:100%; padding:10px 12px; font-size:15px; border:0.5px solid var(--border); border-radius:10px; background:var(--bg); color:var(--text); outline:none; font-family:inherit;" oninput="document.getElementById('source-val').value=this.value.trim()" />
+      <input type="text" id="source-other" class="extra-input" placeholder="Вкажи джерело" oninput="document.getElementById('source-val').value=this.value.trim()" />
     </div>
 
     <div class="card">
@@ -201,28 +141,49 @@
 
     <div class="card">
       <div class="card-label">Куди відбулась оплата</div>
-      <div class="field" style="margin:0">
-        <input type="text" id="payment-dest" placeholder="ПІБ власника картки або ФОП" />
+      <div class="field" style="margin:0"><input type="text" id="payment-dest" placeholder="ПІБ власника картки або ФОП" /></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Озвучена плюшка</div>
+      <div class="chips" id="bonus-chips">
+        <button class="chip" onclick="selectChip(this,'bonus-chips','bonus-val','bonus-other','',true)">Безкоштовна доставка</button>
+        <button class="chip" onclick="selectChip(this,'bonus-chips','bonus-val','bonus-other','',true)">Знижка на доставку</button>
+        <button class="chip" onclick="selectChip(this,'bonus-chips','bonus-val','bonus-other','',true)">Кріпильні матеріали</button>
+        <button class="chip" onclick="selectChip(this,'bonus-chips','bonus-val','bonus-other',true,true)">Інше...</button>
       </div>
+      <input type="hidden" id="bonus-val" />
+      <input type="text" id="bonus-other" class="extra-input" placeholder="Вкажи плюшку" oninput="document.getElementById('bonus-val').value=this.value.trim()" />
+    </div>
+
+    <div class="card">
+      <div class="card-label">Тип доставки</div>
+      <div class="chips" id="delivery-chips">
+        <button class="chip" onclick="selectChip(this,'delivery-chips','delivery-val','delivery-other','',true)">Нашим транспортом</button>
+        <button class="chip" onclick="selectChip(this,'delivery-chips','delivery-val','delivery-other','',true)">Попутка</button>
+        <button class="chip" onclick="selectChip(this,'delivery-chips','delivery-val','delivery-other','',true)">Delivery</button>
+        <button class="chip" onclick="selectChip(this,'delivery-chips','delivery-val','delivery-other','',true)">Самовивіз</button>
+        <button class="chip" onclick="selectChip(this,'delivery-chips','delivery-val','delivery-other',true,true)">Інше...</button>
+      </div>
+      <input type="hidden" id="delivery-val" />
+      <input type="text" id="delivery-other" class="extra-input" placeholder="Вкажи тип доставки" oninput="document.getElementById('delivery-val').value=this.value.trim()" />
     </div>
 
     <div class="card">
       <div class="card-label">Скрін рахунку</div>
       <div class="file-zone" id="file-zone" onclick="document.getElementById('invoice-file').click()">
-        <div class="icon">📎</div>
+        <div class="icon">&#128206;</div>
         <div class="ft">Натисни або встав скрін (Ctrl+V)</div>
         <div class="fname" id="file-name" style="display:none"></div>
       </div>
-      <input type="file" id="invoice-file" accept="image/*,.pdf" style="display:none" onchange="handleFile(this)" />
+      <input type="file" id="invoice-file" accept="image/*,.pdf" style="display:none" onchange="handleFile(this,'file-name')" />
     </div>
 
     <button class="btn-submit" id="submit-btn" onclick="submitAdvance()">Зафіксувати аванс</button>
     <div class="status" id="status-msg"></div>
   </div>
 
-  <!-- ══════════════════════════════════════════════ -->
-  <!-- TAB 2: ПОВЕРНЕННЯ                             -->
-  <!-- ══════════════════════════════════════════════ -->
+  <!-- TAB 2 -->
   <div class="tab-panel" id="panel-refund">
     <div class="page-header">
       <h1>Повернення коштів</h1>
@@ -232,55 +193,34 @@
     <div class="card">
       <div class="card-label">Основна інформація</div>
       <div class="row2">
-        <div class="field">
-          <label>Ім'я МП</label>
-          <input type="text" id="r-mp-name" placeholder="Ім'я та прізвище" />
-        </div>
-        <div class="field">
-          <label>Дата повернення</label>
-          <input type="date" id="r-date" />
-        </div>
+        <div class="field"><label>Ім'я МП</label><input type="text" id="r-mp-name" placeholder="Ім'я та прізвище" /></div>
+        <div class="field"><label>Дата повернення</label><input type="date" id="r-date" /></div>
       </div>
-      <div class="field">
-        <label>Посилання на угоду (CRM)</label>
-        <input type="url" id="r-deal-link" placeholder="https://..." />
-      </div>
+      <div class="field"><label>Посилання на угоду (CRM)</label><input type="url" id="r-deal-link" placeholder="https://..." /></div>
     </div>
 
     <div class="card">
       <div class="card-label">Фінанси повернення</div>
       <div class="row2">
-        <div class="field">
-          <label>Сума авансу</label>
-          <div class="amount-wrap">
-            <span class="currency">₴</span>
-            <input type="number" id="r-adv-amount" placeholder="0" min="0" />
-          </div>
-        </div>
-        <div class="field">
-          <label>Сума угоди</label>
-          <div class="amount-wrap">
-            <span class="currency">₴</span>
-            <input type="number" id="r-deal-amount" placeholder="0" min="0" />
-          </div>
-        </div>
+        <div class="field"><label>Сума авансу</label><div class="amount-wrap"><span class="currency">&#8372;</span><input type="number" id="r-adv-amount" placeholder="0" min="0" /></div></div>
+        <div class="field"><label>Сума угоди</label><div class="amount-wrap"><span class="currency">&#8372;</span><input type="number" id="r-deal-amount" placeholder="0" min="0" /></div></div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-label">Джерело</div>
-      <div class="sources" id="r-sources">
-        <button class="src-btn" onclick="selectRefundSource(this)">Facebook Ecoforma</button>
-        <button class="src-btn" onclick="selectRefundSource(this)">Дзвінок Сайт Ecoforma</button>
-        <button class="src-btn" onclick="selectRefundSource(this)">Сайт Ecoforma</button>
-        <button class="src-btn" onclick="selectRefundSource(this)">Facebook Wood Agency</button>
-        <button class="src-btn" onclick="selectRefundSource(this)">Сайт Wood Agency</button>
-        <button class="src-btn" onclick="selectRefundSource(this)">Дзвінок</button>
-        <button class="src-btn" onclick="selectRefundSource(this)">OLX</button>
-        <button class="src-btn" onclick="selectRefundSource(this, true)">Інше...</button>
+      <div class="chips" id="r-sources">
+        <button class="chip" onclick="selectChip(this,'r-sources','r-source-val','r-source-other')">Facebook Ecoforma</button>
+        <button class="chip" onclick="selectChip(this,'r-sources','r-source-val','r-source-other')">Дзвінок Сайт Ecoforma</button>
+        <button class="chip" onclick="selectChip(this,'r-sources','r-source-val','r-source-other')">Сайт Ecoforma</button>
+        <button class="chip" onclick="selectChip(this,'r-sources','r-source-val','r-source-other')">Facebook Wood Agency</button>
+        <button class="chip" onclick="selectChip(this,'r-sources','r-source-val','r-source-other')">Сайт Wood Agency</button>
+        <button class="chip" onclick="selectChip(this,'r-sources','r-source-val','r-source-other')">Дзвінок</button>
+        <button class="chip" onclick="selectChip(this,'r-sources','r-source-val','r-source-other')">OLX</button>
+        <button class="chip" onclick="selectChip(this,'r-sources','r-source-val','r-source-other',true)">Інше...</button>
       </div>
       <input type="hidden" id="r-source-val" />
-      <input type="text" id="r-source-other" placeholder="Вкажи джерело" style="display:none; margin-top:8px; width:100%; padding:10px 12px; font-size:15px; border:0.5px solid var(--border); border-radius:10px; background:var(--bg); color:var(--text); outline:none; font-family:inherit;" oninput="document.getElementById('r-source-val').value=this.value.trim()" />
+      <input type="text" id="r-source-other" class="extra-input" placeholder="Вкажи джерело" oninput="document.getElementById('r-source-val').value=this.value.trim()" />
     </div>
 
     <div class="card">
@@ -293,9 +233,7 @@
 
     <div class="card">
       <div class="card-label">Куди відбулась оплата (оригінал)</div>
-      <div class="field" style="margin:0">
-        <input type="text" id="r-payment-dest" placeholder="ПІБ власника картки або ФОП" />
-      </div>
+      <div class="field" style="margin:0"><input type="text" id="r-payment-dest" placeholder="ПІБ власника картки або ФОП" /></div>
     </div>
 
     <div class="card danger-card">
@@ -313,37 +251,32 @@
     <div class="card">
       <div class="card-label">Скрін рахунку</div>
       <div class="file-zone" id="r-file-zone" onclick="document.getElementById('r-invoice-file').click()">
-        <div class="icon">📎</div>
+        <div class="icon">&#128206;</div>
         <div class="ft">Натисни або встав скрін (Ctrl+V)</div>
         <div class="fname" id="r-file-name" style="display:none"></div>
       </div>
-      <input type="file" id="r-invoice-file" accept="image/*,.pdf" style="display:none" onchange="handleRefundFile(this)" />
+      <input type="file" id="r-invoice-file" accept="image/*,.pdf" style="display:none" onchange="handleFile(this,'r-file-name')" />
     </div>
 
-    <button class="btn-submit danger" id="r-submit-btn" onclick="submitRefund()">↩️ Оформити повернення</button>
+    <button class="btn-submit danger" id="r-submit-btn" onclick="submitRefund()">&#8617;&#65039; Оформити повернення</button>
     <div class="status" id="r-status-msg"></div>
   </div>
 
 </div>
-
 <script>
-  // ====== НАЛАШТУВАННЯ ======
   const _p = new URLSearchParams(window.location.search);
-  const TG_BOT_TOKEN = _p.get('t') || '';
-  const TG_CHAT_ID   = _p.get('c') || '';
+  const TG_BOT_TOKEN  = _p.get('t') || '';
+  const TG_CHAT_ID    = _p.get('c') || '';
   const SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbxq4F8snb9kJFPil6q6zTfYvv8dLmQcE5Jiy7qCKhLoUhKVyXy3mPVlqWGp1ck_uFf_Vw/exec';
-  // ==========================
 
   if (!TG_BOT_TOKEN || !TG_CHAT_ID) {
-    document.body.innerHTML = '<div style="padding:2rem;font-family:sans-serif;color:#c0392b;">⚠️ Посилання недійсне. Використовуй закріплене посилання з TG-групи.</div>';
+    document.body.innerHTML = '<div style="padding:2rem;font-family:sans-serif;color:#c0392b;">Посилання недійсне. Використовуй закріплене посилання з TG-групи.</div>';
   }
 
-  // Init dates
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('adv-date').value = today;
   document.getElementById('r-date').value   = today;
 
-  // ── Tab switch ──────────────────────────────────
   function switchTab(tab) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -351,37 +284,26 @@
     document.getElementById('tab-' + tab).classList.add('active');
   }
 
-  // ── Source select (advance) ──────────────────────
-  function selectSource(btn, isOther) {
-    document.querySelectorAll('#sources .src-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const otherInput = document.getElementById('source-other');
+  // Універсальний вибір чіпа
+  // isOther - показати текстове поле
+  // isGreen - зелена активна кнопка (плюшка/доставка)
+  function selectChip(btn, groupId, hiddenId, otherId, isOther, isGreen) {
+    const activeClass = isGreen ? 'active-green' : 'active-src';
+    document.querySelectorAll('#' + groupId + ' .chip').forEach(b => {
+      b.classList.remove('active-src', 'active-green');
+    });
+    btn.classList.add(activeClass);
+    const otherEl = document.getElementById(otherId);
     if (isOther) {
-      otherInput.style.display = 'block';
-      otherInput.focus();
-      document.getElementById('source-val').value = otherInput.value.trim();
+      otherEl.style.display = 'block';
+      otherEl.focus();
+      document.getElementById(hiddenId).value = otherEl.value.trim();
     } else {
-      otherInput.style.display = 'none';
-      document.getElementById('source-val').value = btn.textContent.trim();
+      otherEl.style.display = 'none';
+      document.getElementById(hiddenId).value = btn.textContent.trim();
     }
   }
 
-  // ── Source select (refund) ───────────────────────
-  function selectRefundSource(btn, isOther) {
-    document.querySelectorAll('#r-sources .src-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const otherInput = document.getElementById('r-source-other');
-    if (isOther) {
-      otherInput.style.display = 'block';
-      otherInput.focus();
-      document.getElementById('r-source-val').value = otherInput.value.trim();
-    } else {
-      otherInput.style.display = 'none';
-      document.getElementById('r-source-val').value = btn.textContent.trim();
-    }
-  }
-
-  // ── Ratio bar ───────────────────────────────────
   function updateRatio() {
     const adv = parseFloat(document.getElementById('adv-amount').value) || 0;
     const deal = parseFloat(document.getElementById('deal-amount').value) || 0;
@@ -391,41 +313,28 @@
       const pct = Math.min(100, Math.round(adv / deal * 100));
       document.getElementById('ratio-fill').style.width = pct + '%';
       document.getElementById('ratio-label').textContent = 'Аванс — ' + pct + '% від суми угоди';
-    } else {
-      wrap.style.display = 'none';
-    }
+    } else { wrap.style.display = 'none'; }
   }
 
-  // ── File handlers ───────────────────────────────
-  function handleFile(input) {
+  function handleFile(input, labelId) {
     const f = input.files[0];
-    if (f) { const el = document.getElementById('file-name'); el.textContent = '✓ ' + f.name; el.style.display = 'block'; }
-  }
-  function handleRefundFile(input) {
-    const f = input.files[0];
-    if (f) { const el = document.getElementById('r-file-name'); el.textContent = '✓ ' + f.name; el.style.display = 'block'; }
+    if (f) { const el = document.getElementById(labelId); el.textContent = '✓ ' + f.name; el.style.display = 'block'; }
   }
 
-  // ── Paste image (advance) ───────────────────────
   document.addEventListener('paste', function(e) {
     const activePanel = document.querySelector('.tab-panel.active').id;
     const items = (e.clipboardData || e.originalEvent.clipboardData).items;
     for (const item of items) {
       if (item.type.startsWith('image/')) {
         const file = item.getAsFile();
-        const dt = new DataTransfer();
-        dt.items.add(file);
+        const dt = new DataTransfer(); dt.items.add(file);
         if (activePanel === 'panel-advance') {
           document.getElementById('invoice-file').files = dt.files;
-          const el = document.getElementById('file-name');
-          el.textContent = '✓ Скрін вставлено';
-          el.style.display = 'block';
+          const el = document.getElementById('file-name'); el.textContent = '✓ Скрін вставлено'; el.style.display = 'block';
           document.getElementById('file-zone').style.borderColor = 'var(--success)';
         } else {
           document.getElementById('r-invoice-file').files = dt.files;
-          const el = document.getElementById('r-file-name');
-          el.textContent = '✓ Скрін вставлено';
-          el.style.display = 'block';
+          const el = document.getElementById('r-file-name'); el.textContent = '✓ Скрін вставлено'; el.style.display = 'block';
           document.getElementById('r-file-zone').style.borderColor = 'var(--success)';
         }
         break;
@@ -433,102 +342,92 @@
     }
   });
 
-  function clearModeHint() {
-    document.getElementById('mode-hint').style.display = 'none';
-  }
-
-  // ── Send to Telegram ────────────────────────────
   async function sendToTelegram(text, file) {
     if (file) {
       const fd = new FormData();
-      fd.append('chat_id', TG_CHAT_ID);
-      fd.append('photo', file);
-      fd.append('caption', text);
-      fd.append('parse_mode', 'Markdown');
-      await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fd });
+      fd.append('chat_id', TG_CHAT_ID); fd.append('photo', file);
+      fd.append('caption', text); fd.append('parse_mode', 'Markdown');
+      await fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendPhoto', { method: 'POST', body: fd });
     } else {
-      await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: 'Markdown' })
+      await fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: 'Markdown' })
       });
     }
   }
 
-  // ══════════════════════════════════════════════
-  // SUBMIT ADVANCE (new or update)
-  // ══════════════════════════════════════════════
+  function showErr(el, msg) { el.textContent = msg; el.className = 'status err'; }
+
   async function submitAdvance() {
     const statusEl = document.getElementById('status-msg');
     const btn      = document.getElementById('submit-btn');
+    const mpName   = document.getElementById('mp-name').value.trim();
+    const date     = document.getElementById('adv-date').value;
+    const dealLink = document.getElementById('deal-link').value.trim();
+    const advAmt   = parseFloat(document.getElementById('adv-amount').value);
+    const dealAmt  = parseFloat(document.getElementById('deal-amount').value);
+    const source   = document.getElementById('source-val').value;
+    const utm      = document.getElementById('utm').value.trim();
+    const payDest  = document.getElementById('payment-dest').value.trim();
+    const bonus    = document.getElementById('bonus-val').value;
+    const delivery = document.getElementById('delivery-val').value;
 
-    const mpName    = document.getElementById('mp-name').value.trim();
-    const date      = document.getElementById('adv-date').value;
-    const dealLink  = document.getElementById('deal-link').value.trim();
-    const advAmt    = parseFloat(document.getElementById('adv-amount').value);
-    const dealAmt   = parseFloat(document.getElementById('deal-amount').value);
-    const source    = document.getElementById('source-val').value;
-    const utm       = document.getElementById('utm').value.trim();
-    const payDest   = document.getElementById('payment-dest').value.trim();
+    if (!mpName)               return showErr(statusEl, "Введи своє ім'я");
+    if (!date)                 return showErr(statusEl, 'Вкажи дату');
+    if (!dealLink)             return showErr(statusEl, 'Вкажи посилання на угоду');
+    if (!advAmt || advAmt <= 0) return showErr(statusEl, 'Вкажи суму авансу');
+    if (!dealAmt || dealAmt <= 0) return showErr(statusEl, 'Вкажи суму угоди');
+    if (!source)               return showErr(statusEl, 'Обери джерело');
 
-    if (!mpName)             return showErr(statusEl, "Введи своє ім'я");
-    if (!date)               return showErr(statusEl, 'Вкажи дату');
-    if (!dealLink)           return showErr(statusEl, 'Вкажи посилання на угоду');
-    if (!advAmt || advAmt<=0) return showErr(statusEl, 'Вкажи суму авансу');
-    if (!dealAmt || dealAmt<=0) return showErr(statusEl, 'Вкажи суму угоди');
-    if (!source)             return showErr(statusEl, 'Обери джерело');
-
-    btn.disabled = true;
-    btn.textContent = 'Відправляємо...';
-    statusEl.textContent = '';
+    btn.disabled = true; btn.textContent = 'Відправляємо...'; statusEl.textContent = '';
 
     try {
-      // Відправляємо в Sheets (скрипт сам вирішить: оновити чи додати)
-      const sheetResp = await fetch(SHEET_WEBHOOK, {
-        method: 'POST',
-        mode: 'no-cors',
+      let isUpdate = false, existingAdv = 0;
+      try {
+        const checkResp = await fetch(SHEET_WEBHOOK + '?action=check&link=' + encodeURIComponent(dealLink));
+        const checkData = await checkResp.json();
+        isUpdate = checkData.found === true;
+        existingAdv = parseFloat(checkData.advAmount) || 0;
+      } catch(ce) {}
+
+      await fetch(SHEET_WEBHOOK, {
+        method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'upsert',
-          mpName, date, dealLink,
-          advAmount: advAmt, dealAmount: dealAmt,
-          source, utm, paymentDest: payDest
-        })
+        body: JSON.stringify({ action: 'upsert', mpName, date, dealLink, advAmount: advAmt, dealAmount: dealAmt, source, utm, paymentDest: payDest, bonus: bonus, delivery: delivery })
       });
 
-      // TG повідомлення
-      const pct = Math.round(advAmt / dealAmt * 100);
-      const tgText =
-        `❗️*Надходження коштів*\n\n` +
-        `МП: ${mpName}\n` +
-        `Угода: [посилання](${dealLink})\n` +
-        `Сума авансу: ₴${advAmt.toLocaleString('uk-UA')}\n` +
-        `Куди відбулась оплата: ${payDest || '—'}\n` +
-        `Джерело: ${source}\n` +
-        (utm ? `UTM: ${utm}` : '');
+      const totalAdv  = isUpdate ? existingAdv + advAmt : advAmt;
+      const header    = isUpdate ? '\uD83D\uDCB5 *ДОПЛАТА ПО УГОДІ*' : '\u2757\uFE0F *Надходження коштів*';
+      const moneyLine = isUpdate
+        ? 'Доплата: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n' + 'Загальна сума авансів: \u20B4' + totalAdv.toLocaleString('uk-UA') + '\n'
+        : 'Сума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n';
+
+      const tgText = header + '\n\n'
+        + 'МП: ' + mpName + '\n'
+        + 'Угода: [посилання](' + dealLink + ')\n'
+        + moneyLine
+        + 'Куди відбулась оплата: ' + (payDest || '—') + '\n'
+        + 'Джерело: ' + source + '\n'
+        + (utm      ? 'UTM: ' + utm + '\n'           : '')
+        + (bonus    ? 'Плюшка: ' + bonus + '\n'      : '')
+        + (delivery ? 'Доставка: ' + delivery        : '');
 
       await sendToTelegram(tgText, document.getElementById('invoice-file').files[0]);
 
       statusEl.textContent = '✓ Зафіксовано успішно!';
       statusEl.className = 'status ok';
       btn.textContent = 'Зафіксовано ✓';
-
-      setTimeout(() => resetAdvanceForm(btn), 3000);
+      setTimeout(() => resetAdvance(btn), 3000);
 
     } catch(e) {
       showErr(statusEl, "Помилка відправки. Перевір з'єднання.");
-      btn.disabled = false;
-      btn.textContent = 'Зафіксувати аванс';
+      btn.disabled = false; btn.textContent = 'Зафіксувати аванс';
     }
   }
 
-  // ══════════════════════════════════════════════
-  // SUBMIT REFUND
-  // ══════════════════════════════════════════════
   async function submitRefund() {
     const statusEl = document.getElementById('r-status-msg');
     const btn      = document.getElementById('r-submit-btn');
-
     const mpName   = document.getElementById('r-mp-name').value.trim();
     const date     = document.getElementById('r-date').value;
     const dealLink = document.getElementById('r-deal-link').value.trim();
@@ -546,78 +445,55 @@
     if (!reason)   return showErr(statusEl, 'Вкажи причину повернення');
     if (!req)      return showErr(statusEl, 'Вкажи реквізити для повернення');
 
-    btn.disabled = true;
-    btn.textContent = 'Оформлюємо...';
-    statusEl.textContent = '';
+    btn.disabled = true; btn.textContent = 'Оформлюємо...'; statusEl.textContent = '';
 
     try {
-      // Видалення з Sheets
       await fetch(SHEET_WEBHOOK, {
-        method: 'POST',
-        mode: 'no-cors',
+        method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'refund',
-          dealLink, mpName, date,
-          advAmount: advAmt || 0,
-          dealAmount: dealAmt || 0,
-          source, utm, paymentDest: payDest,
-          reason, requisites: req
-        })
+        body: JSON.stringify({ action: 'refund', dealLink, mpName, date, advAmount: advAmt || 0, dealAmount: dealAmt || 0, source, utm, paymentDest: payDest, reason, requisites: req })
       });
 
-      // TG повідомлення
-      const tgText =
-        `🔴 *ПОВЕРНЕННЯ КОШТІВ*\n\n` +
-        `МП: ${mpName}\n` +
-        `Угода: [посилання](${dealLink})\n` +
-        (advAmt ? `Сума авансу: ₴${advAmt.toLocaleString('uk-UA')}\n` : '') +
-        `Куди відбулась оплата: ${payDest || '—'}\n` +
-        `Джерело: ${source || '—'}\n` +
-        (utm ? `UTM: ${utm}\n` : '') +
-        `\n*Причина повернення:*\n${reason}\n` +
-        `\n*Реквізити для повернення:*\n${req}`;
+      const tgText = '\uD83D\uDD34 *ПОВЕРНЕННЯ КОШТІВ*\n\n'
+        + 'МП: ' + mpName + '\n'
+        + 'Угода: [посилання](' + dealLink + ')\n'
+        + (advAmt ? 'Сума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n' : '')
+        + 'Куди відбулась оплата: ' + (payDest || '—') + '\n'
+        + 'Джерело: ' + (source || '—') + '\n'
+        + (utm ? 'UTM: ' + utm + '\n' : '')
+        + '\n*Причина повернення:*\n' + reason + '\n'
+        + '\n*Реквізити для повернення:*\n' + req;
 
       await sendToTelegram(tgText, document.getElementById('r-invoice-file').files[0]);
 
       statusEl.textContent = '✓ Повернення оформлено!';
       statusEl.className = 'status ok';
       btn.textContent = 'Оформлено ✓';
-
-      setTimeout(() => resetRefundForm(btn), 3000);
+      setTimeout(() => resetRefund(btn), 3000);
 
     } catch(e) {
       showErr(statusEl, "Помилка відправки. Перевір з'єднання.");
-      btn.disabled = false;
-      btn.textContent = '↩️ Оформити повернення';
+      btn.disabled = false; btn.textContent = 'Оформити повернення';
     }
   }
 
-  // ── Helpers ────────────────────────────────────
-  function showErr(el, msg) {
-    el.textContent = msg;
-    el.className = 'status err';
-  }
-
-  function resetAdvanceForm(btn) {
-    ['mp-name','deal-link','utm','payment-dest'].forEach(id => document.getElementById(id).value = '');
+  function resetAdvance(btn) {
+    ['mp-name','deal-link','utm','payment-dest','source-other','bonus-other','delivery-other'].forEach(id => document.getElementById(id).value = '');
     ['adv-amount','deal-amount'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('source-val').value = '';
+    ['source-val','bonus-val','delivery-val'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('invoice-file').value = '';
     document.getElementById('file-name').style.display = 'none';
-    document.getElementById('source-other').style.display = 'none';
+    ['source-other','bonus-other','delivery-other'].forEach(id => document.getElementById(id).style.display = 'none');
     document.getElementById('ratio-wrap').style.display = 'none';
     document.getElementById('adv-date').value = new Date().toISOString().split('T')[0];
     document.getElementById('file-zone').style.borderColor = '';
-    document.querySelectorAll('#sources .src-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('mode-hint').style.display = 'none';
+    document.querySelectorAll('#sources .chip, #bonus-chips .chip, #delivery-chips .chip').forEach(b => b.classList.remove('active-src','active-green'));
     document.getElementById('status-msg').textContent = '';
-    btn.disabled = false;
-    btn.textContent = 'Зафіксувати аванс';
+    btn.disabled = false; btn.textContent = 'Зафіксувати аванс';
   }
 
-  function resetRefundForm(btn) {
-    ['r-mp-name','r-deal-link','r-utm','r-payment-dest','r-reason','r-requisites'].forEach(id => document.getElementById(id).value = '');
+  function resetRefund(btn) {
+    ['r-mp-name','r-deal-link','r-utm','r-payment-dest','r-reason','r-requisites','r-source-other'].forEach(id => document.getElementById(id).value = '');
     ['r-adv-amount','r-deal-amount'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('r-source-val').value = '';
     document.getElementById('r-invoice-file').value = '';
@@ -625,10 +501,9 @@
     document.getElementById('r-source-other').style.display = 'none';
     document.getElementById('r-file-zone').style.borderColor = '';
     document.getElementById('r-date').value = new Date().toISOString().split('T')[0];
-    document.querySelectorAll('#r-sources .src-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#r-sources .chip').forEach(b => b.classList.remove('active-src','active-green'));
     document.getElementById('r-status-msg').textContent = '';
-    btn.disabled = false;
-    btn.textContent = '↩️ Оформити повернення';
+    btn.disabled = false; btn.textContent = 'Оформити повернення';
   }
 </script>
 </body>
