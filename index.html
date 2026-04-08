@@ -169,6 +169,13 @@
     </div>
 
     <div class="card">
+      <div class="card-label">Локація доставки</div>
+      <div class="field" style="margin:0">
+        <input type="text" id="location" placeholder="Місто, відділення або адреса доставки" />
+      </div>
+    </div>
+
+    <div class="card">
       <div class="card-label">Скрін рахунку</div>
       <div class="file-zone" id="file-zone" onclick="document.getElementById('invoice-file').click()">
         <div class="icon">&#128206;</div>
@@ -402,6 +409,7 @@
     const payDest  = document.getElementById('payment-dest').value.trim();
     const bonus    = getBonusValue();
     const delivery = document.getElementById('delivery-val').value;
+    const location  = document.getElementById('location').value.trim();
 
     if (!mpName)               return showErr(statusEl, "Введи своє ім'я");
     if (!date)                 return showErr(statusEl, 'Вкажи дату');
@@ -424,24 +432,32 @@
       await fetch(SHEET_WEBHOOK, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'upsert', mpName, date, dealLink, advAmount: advAmt, dealAmount: dealAmt, source, utm, paymentDest: payDest, bonus: bonus, delivery: delivery })
+        body: JSON.stringify({ action: 'upsert', mpName, date, dealLink, advAmount: advAmt, dealAmount: dealAmt, source, utm, paymentDest: payDest, bonus: bonus, delivery: delivery, location: location })
       });
 
-      const totalAdv  = isUpdate ? existingAdv + advAmt : advAmt;
-      const header    = isUpdate ? '\uD83D\uDCB5 *ДОПЛАТА ПО УГОДІ*' : '\u2757\uFE0F *Надходження коштів*';
-      const moneyLine = isUpdate
-        ? 'Доплата: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n' + 'Загальна сума авансів: \u20B4' + totalAdv.toLocaleString('uk-UA') + '\n'
-        : 'Сума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n';
+      const totalAdv = isUpdate ? existingAdv + advAmt : advAmt;
+      const header   = isUpdate ? '\uD83D\uDCB5 *ДОПЛАТА ПО УГОДІ*' : '\u2757\uFE0F *Надходження коштів*';
+
+      let finBlock = '';
+      if (isUpdate) {
+        finBlock = 'Доплата: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n'
+                 + 'Загальна сума авансів: \u20B4' + totalAdv.toLocaleString('uk-UA') + '\n'
+                 + 'Сума угоди: \u20B4' + dealAmt.toLocaleString('uk-UA');
+      } else {
+        finBlock = 'Сума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n'
+                 + 'Сума угоди: \u20B4' + dealAmt.toLocaleString('uk-UA');
+      }
 
       const tgText = header + '\n\n'
         + 'МП: ' + mpName + '\n'
         + 'Угода: [посилання](' + dealLink + ')\n'
-        + moneyLine
-        + 'Куди відбулась оплата: ' + (payDest || '—') + '\n'
-        + 'Джерело: ' + source + '\n'
-        + (utm      ? 'UTM: ' + utm + '\n'           : '')
-        + (bonus    ? 'Плюшка: ' + bonus + '\n'      : '')
-        + (delivery ? 'Доставка: ' + delivery        : '');
+        + '\n' + finBlock + '\n'
+        + 'Оплата: ' + (payDest || '—') + '\n'
+        + '\nДжерело: ' + source + '\n'
+        + (utm      ? 'UTM: '      + utm      + '\n' : '')
+        + (bonus    ? 'Плюшка: '   + bonus    + '\n' : '')
+        + (delivery ? 'Доставка: ' + delivery + '\n' : '')
+        + (location ? 'Локація: '  + location         : '');
 
       await sendToTelegram(tgText, document.getElementById('invoice-file').files[0]);
 
@@ -485,15 +501,15 @@
         body: JSON.stringify({ action: 'refund', dealLink, mpName, date, advAmount: advAmt || 0, dealAmount: dealAmt || 0, source, utm, paymentDest: payDest, reason, requisites: req })
       });
 
-      const tgText = '\uD83D\uDD34 *ПОВЕРНЕННЯ КОШТІВ*\n\n'
+      const tgText = '\uD83D\uDD34 ПОВЕРНЕННЯ КОШТІВ\n\n'
         + 'МП: ' + mpName + '\n'
         + 'Угода: [посилання](' + dealLink + ')\n'
-        + (advAmt ? 'Сума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n' : '')
-        + 'Куди відбулась оплата: ' + (payDest || '—') + '\n'
+        + (advAmt ? '\nСума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n' : '\n')
+        + 'Оплата була на: ' + (payDest || '—') + '\n'
         + 'Джерело: ' + (source || '—') + '\n'
         + (utm ? 'UTM: ' + utm + '\n' : '')
-        + '\n*Причина повернення:*\n' + reason + '\n'
-        + '\n*Реквізити для повернення:*\n' + req;
+        + '\nПричина: ' + reason + '\n'
+        + '\nРеквізити для повернення: ' + req;
 
       await sendToTelegram(tgText, document.getElementById('r-invoice-file').files[0]);
 
@@ -509,7 +525,7 @@
   }
 
   function resetAdvance(btn) {
-    ['mp-name','deal-link','utm','payment-dest','source-other','bonus-other','delivery-other'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    ['mp-name','deal-link','utm','payment-dest','source-other','bonus-other','delivery-other','location'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     ['adv-amount','deal-amount'].forEach(id => document.getElementById(id).value = '');
     ['source-val','bonus-val','delivery-val'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('invoice-file').value = '';
