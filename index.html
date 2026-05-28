@@ -87,7 +87,6 @@
     <button class="tab-btn refund-tab" id="tab-refund" onclick="switchTab('refund')">&#8617;&#65039; Повернення</button>
   </div>
 
-  <!-- TAB 1 -->
   <div class="tab-panel active" id="panel-advance">
     <div class="page-header">
       <h1>Фіксація надходження коштів</h1>
@@ -189,7 +188,6 @@
     <div class="status" id="status-msg"></div>
   </div>
 
-  <!-- TAB 2 -->
   <div class="tab-panel" id="panel-refund">
     <div class="page-header">
       <h1>Повернення коштів</h1>
@@ -352,12 +350,12 @@
     if (file) {
       const fd = new FormData();
       fd.append('chat_id', TG_CHAT_ID); fd.append('photo', file);
-      fd.append('caption', text); fd.append('parse_mode', 'Markdown');
+      fd.append('caption', text); fd.append('parse_mode', 'HTML');
       await fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendPhoto', { method: 'POST', body: fd });
     } else {
       await fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: 'Markdown' })
+        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: 'HTML' })
       });
     }
   }
@@ -440,7 +438,7 @@
       });
 
       const totalAdv = isUpdate ? existingAdv + advAmt : advAmt;
-      const header   = isUpdate ? '\uD83D\uDCB5 *ДОПЛАТА ПО УГОДІ*' : '\u2757\uFE0F *Надходження коштів*';
+      const header   = isUpdate ? '\uD83D\uDCB5 <b>ДОПЛАТА ПО УГОДІ</b>' : '\u2757\uFE0F <b>Надходження коштів</b>';
 
       let finBlock = '';
       if (isUpdate) {
@@ -454,7 +452,7 @@
 
       const tgText = header + '\n\n'
         + 'МП: ' + mpName + '\n'
-        + 'Угода: [посилання](' + dealLink + ')\n'
+        + 'Угода: <a href="' + dealLink + '">посилання</a>\n'
         + '\n' + finBlock + '\n'
         + 'Оплата: ' + (payDest || '—') + '\n'
         + '\nДжерело: ' + source + '\n'
@@ -505,9 +503,9 @@
         body: JSON.stringify({ action: 'refund', dealLink, mpName, date, advAmount: advAmt || 0, dealAmount: dealAmt || 0, source, utm, paymentDest: payDest, reason, requisites: req })
       });
 
-      const tgText = '\uD83D\uDD34 ПОВЕРНЕННЯ КОШТІВ\n\n'
+      const tgText = '\uD83D\uDD34 <b>ПОВЕРНЕННЯ КОШТІВ</b>\n\n'
         + 'МП: ' + mpName + '\n'
-        + 'Угода: [посилання](' + dealLink + ')\n'
+        + 'Угода: <a href="' + dealLink + '">посилання</a>\n'
         + (advAmt ? '\nСума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n' : '\n')
         + 'Оплата була на: ' + (payDest || '—') + '\n'
         + 'Джерело: ' + (source || '—') + '\n'
