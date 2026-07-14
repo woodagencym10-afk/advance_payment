@@ -96,7 +96,7 @@
     <div class="card">
       <div class="card-label">Основна інформація</div>
       <div class="row2">
-        <div class="field"><label>Ім'я МП</label><input type="text" id="mp-name" placeholder="Ім'я та прізвище" /></div>
+        <div class="field"><label>МП (Прізвище та ім'я)</label><input type="text" id="mp-name" placeholder="Прізвище та ім'я" /></div>
         <div class="field"><label>Дата</label><input type="date" id="adv-date" /></div>
       </div>
       <div class="field"><label>Посилання на угоду (CRM)</label><input type="url" id="deal-link" placeholder="https://..." /></div>
@@ -201,7 +201,7 @@
     <div class="card">
       <div class="card-label">Основна інформація</div>
       <div class="row2">
-        <div class="field"><label>Ім'я МП</label><input type="text" id="r-mp-name" placeholder="Ім'я та прізвище" /></div>
+        <div class="field"><label>МП (Прізвище та ім'я)</label><input type="text" id="r-mp-name" placeholder="Прізвище та ім'я" /></div>
         <div class="field"><label>Дата повернення</label><input type="date" id="r-date" /></div>
       </div>
       <div class="field"><label>Посилання на угоду (CRM)</label><input type="url" id="r-deal-link" placeholder="https://..." /></div>
@@ -418,7 +418,7 @@
     const location  = document.getElementById('location').value.trim();
     const invoiceNum = document.getElementById('invoice-num').value.trim();
 
-    if (!mpName)               return showErr(statusEl, "Введи своє ім'я");
+    if (!mpName)               return showErr(statusEl, "Введи прізвище та ім'я");
     if (!date)                 return showErr(statusEl, 'Вкажи дату');
     if (!dealLink)             return showErr(statusEl, 'Вкажи посилання на угоду');
     if (!advAmt || advAmt <= 0) return showErr(statusEl, 'Вкажи суму авансу');
@@ -448,7 +448,9 @@
       });
 
       const totalAdv = isUpdate ? existingAdv + advAmt : advAmt;
-      const header   = isUpdate ? '\uD83D\uDCB5 <b>ДОПЛАТА ПО УГОДІ</b>' : '\u2757\uFE0F <b>Надходження коштів</b>';
+      const header   = isUpdate
+        ? '\uD83D\uDCB5 <b>ДОПЛАТА ПО УГОДІ — РАХУНОК № ' + invoiceNum + '</b>'
+        : '\u2757\uFE0F <b>Надходження коштів — РАХУНОК № ' + invoiceNum + '</b>';
 
       let finBlock = '';
       if (isUpdate) {
@@ -464,7 +466,6 @@
         + 'МП: ' + mpName + '\n'
         + 'Угода: <a href="' + dealLink + '">посилання</a>\n'
         + '\n' + finBlock + '\n'
-        + 'Рахунок №: ' + invoiceNum + '\n'
         + 'Оплата: ' + (payDest || '—') + '\n'
         + '\nДжерело: ' + source + '\n'
         + (utm      ? 'UTM: '      + utm      + '\n' : '')
@@ -500,7 +501,7 @@
     const req      = document.getElementById('r-requisites').value.trim();
     const invoiceNum = document.getElementById('r-invoice-num').value.trim();
 
-    if (!mpName)   return showErr(statusEl, "Введи своє ім'я");
+    if (!mpName)   return showErr(statusEl, "Введи прізвище та ім'я");
     if (!date)     return showErr(statusEl, 'Вкажи дату');
     if (!dealLink) return showErr(statusEl, 'Вкажи посилання на угоду');
     if (!reason)   return showErr(statusEl, 'Вкажи причину повернення');
@@ -515,11 +516,12 @@
         body: JSON.stringify({ action: 'refund', dealLink, mpName, date, advAmount: advAmt || 0, dealAmount: dealAmt || 0, source, utm, paymentDest: payDest, reason, requisites: req, invoiceNum: invoiceNum })
       });
 
-      const tgText = '\uD83D\uDD34 <b>ПОВЕРНЕННЯ КОШТІВ</b>\n\n'
+      const refundHeader = '\uD83D\uDD34 <b>ПОВЕРНЕННЯ КОШТІВ' + (invoiceNum ? ' — РАХУНОК № ' + invoiceNum : '') + '</b>';
+
+      const tgText = refundHeader + '\n\n'
         + 'МП: ' + mpName + '\n'
         + 'Угода: <a href="' + dealLink + '">посилання</a>\n'
         + (advAmt ? '\nСума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n' : '\n')
-        + (invoiceNum ? 'Рахунок №: ' + invoiceNum + '\n' : '')
         + 'Оплата була на: ' + (payDest || '—') + '\n'
         + 'Джерело: ' + (source || '—') + '\n'
         + (utm ? 'UTM: ' + utm + '\n' : '')
