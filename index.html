@@ -175,7 +175,11 @@
     </div>
 
     <div class="card">
-      <div class="card-label">Скрін рахунку</div>
+      <div class="card-label">Рахунок</div>
+      <div class="field">
+        <label>№ рахунку</label>
+        <input type="text" id="invoice-num" placeholder="Напр. 1245" />
+      </div>
       <div class="file-zone" id="file-zone" onclick="document.getElementById('invoice-file').click()">
         <div class="icon">&#128206;</div>
         <div class="ft">Натисни або встав скрін (Ctrl+V)</div>
@@ -253,7 +257,11 @@
     </div>
 
     <div class="card">
-      <div class="card-label">Скрін рахунку</div>
+      <div class="card-label">Рахунок</div>
+      <div class="field">
+        <label>№ рахунку</label>
+        <input type="text" id="r-invoice-num" placeholder="Напр. 1245" />
+      </div>
       <div class="file-zone" id="r-file-zone" onclick="document.getElementById('r-invoice-file').click()">
         <div class="icon">&#128206;</div>
         <div class="ft">Натисни або встав скрін (Ctrl+V)</div>
@@ -408,6 +416,7 @@
     const bonus    = getBonusValue();
     const delivery = document.getElementById('delivery-val').value;
     const location  = document.getElementById('location').value.trim();
+    const invoiceNum = document.getElementById('invoice-num').value.trim();
 
     if (!mpName)               return showErr(statusEl, "Введи своє ім'я");
     if (!date)                 return showErr(statusEl, 'Вкажи дату');
@@ -415,6 +424,7 @@
     if (!advAmt || advAmt <= 0) return showErr(statusEl, 'Вкажи суму авансу');
     if (!dealAmt || dealAmt <= 0) return showErr(statusEl, 'Вкажи суму угоди');
     if (!source)               return showErr(statusEl, 'Обери джерело');
+    if (!invoiceNum)           return showErr(statusEl, 'Вкажи № рахунку');
 
     btn.disabled = true; btn.textContent = 'Відправляємо...'; statusEl.textContent = '';
 
@@ -434,7 +444,7 @@
       await fetch(SHEET_WEBHOOK, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'upsert', mpName, date, dealLink, advAmount: advAmt, dealAmount: dealAmt, source, utm, paymentDest: payDest, bonus: bonus, delivery: delivery, location: location })
+        body: JSON.stringify({ action: 'upsert', mpName, date, dealLink, advAmount: advAmt, dealAmount: dealAmt, source, utm, paymentDest: payDest, bonus: bonus, delivery: delivery, location: location, invoiceNum: invoiceNum })
       });
 
       const totalAdv = isUpdate ? existingAdv + advAmt : advAmt;
@@ -454,6 +464,7 @@
         + 'МП: ' + mpName + '\n'
         + 'Угода: <a href="' + dealLink + '">посилання</a>\n'
         + '\n' + finBlock + '\n'
+        + 'Рахунок №: ' + invoiceNum + '\n'
         + 'Оплата: ' + (payDest || '—') + '\n'
         + '\nДжерело: ' + source + '\n'
         + (utm      ? 'UTM: '      + utm      + '\n' : '')
@@ -487,6 +498,7 @@
     const payDest  = document.getElementById('r-payment-dest').value.trim();
     const reason   = document.getElementById('r-reason').value.trim();
     const req      = document.getElementById('r-requisites').value.trim();
+    const invoiceNum = document.getElementById('r-invoice-num').value.trim();
 
     if (!mpName)   return showErr(statusEl, "Введи своє ім'я");
     if (!date)     return showErr(statusEl, 'Вкажи дату');
@@ -500,13 +512,14 @@
       await fetch(SHEET_WEBHOOK, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'refund', dealLink, mpName, date, advAmount: advAmt || 0, dealAmount: dealAmt || 0, source, utm, paymentDest: payDest, reason, requisites: req })
+        body: JSON.stringify({ action: 'refund', dealLink, mpName, date, advAmount: advAmt || 0, dealAmount: dealAmt || 0, source, utm, paymentDest: payDest, reason, requisites: req, invoiceNum: invoiceNum })
       });
 
       const tgText = '\uD83D\uDD34 <b>ПОВЕРНЕННЯ КОШТІВ</b>\n\n'
         + 'МП: ' + mpName + '\n'
         + 'Угода: <a href="' + dealLink + '">посилання</a>\n'
         + (advAmt ? '\nСума авансу: \u20B4' + advAmt.toLocaleString('uk-UA') + '\n' : '\n')
+        + (invoiceNum ? 'Рахунок №: ' + invoiceNum + '\n' : '')
         + 'Оплата була на: ' + (payDest || '—') + '\n'
         + 'Джерело: ' + (source || '—') + '\n'
         + (utm ? 'UTM: ' + utm + '\n' : '')
@@ -527,9 +540,9 @@
   }
 
   function resetAdvance(btn) {
-    ['mp-name','deal-link','utm','payment-dest','source-other','bonus-other','delivery-other','location'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    ['mp-name','deal-link','utm','payment-dest','source-other','bonus-other','delivery-other','location','invoice-num'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     ['adv-amount','deal-amount'].forEach(id => document.getElementById(id).value = '');
-    ['source-val','bonus-val','delivery-val'].forEach(id => document.getElementById(id).value = '');
+    ['source-val','bonus-val','delivery-val'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     document.getElementById('invoice-file').value = '';
     document.getElementById('file-name').style.display = 'none';
     ['source-other','bonus-other','delivery-other'].forEach(id => document.getElementById(id).style.display = 'none');
@@ -543,7 +556,7 @@
   }
 
   function resetRefund(btn) {
-    ['r-mp-name','r-deal-link','r-utm','r-payment-dest','r-reason','r-requisites','r-source-other'].forEach(id => document.getElementById(id).value = '');
+    ['r-mp-name','r-deal-link','r-utm','r-payment-dest','r-reason','r-requisites','r-source-other','r-invoice-num'].forEach(id => document.getElementById(id).value = '');
     ['r-adv-amount','r-deal-amount'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('r-source-val').value = '';
     document.getElementById('r-invoice-file').value = '';
